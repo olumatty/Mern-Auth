@@ -1,0 +1,17 @@
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
+
+dotenv.config();
+
+const app = express();
+const port = process.env.PORT || 4000;
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors({ credentials: true }));
+
+app.get("/", (req, res) => res.send("API is working"));
+
+app.listen(port, () => console.log(`Server started on PORT: ${port}`));
