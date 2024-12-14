@@ -13,7 +13,7 @@ export const register = async (req,res) => {
         const existingUser = await userModel.findOne({email})
 
         if (existingUser){
-            return res.json({success: false, mesage: "user already exist"})
+            return res.json({success: false, message: "user already exist"})
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -34,5 +34,33 @@ export const register = async (req,res) => {
     }
     catch (error) {
         res.json({success:false, message:error.message})
+    }
+}
+
+export const login = async (req, res) => {
+
+    const {email, password}= req.body;
+
+    if (!email || !password){
+        return res.json({success:false, message: "Email and Password are required" })
+    }
+    
+    try{
+        const user = await userModel.findOne({email});
+
+        if (!user){
+            return res.json({succedd: false, message:"Invalid Email"})
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password)
+
+        if(!isMatch) {
+
+        }
+
+        
+    }
+    catch(error){
+        return res.json({success: false , message: errror.message})
     }
 }
