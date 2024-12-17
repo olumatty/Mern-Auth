@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/mongodb");
+const authRouter = require("./routes/authRoutes")
 
 dotenv.config();
 
@@ -15,5 +16,6 @@ app.use(cookieParser());
 app.use(cors({ credentials: true }));
 
 app.get("/", (req, res) => res.send("API is working"));
+app.use('/api/auth', authRouter)
 
 app.listen(port, () => console.log(`Server started on PORT: ${port}`));
