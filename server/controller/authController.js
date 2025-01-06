@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userModel = require("../model/usermodel");
+const transporter = require("../config/nodemailer")
 
 const register = async (req, res) => {
     const { name, email, password } = req.body;
@@ -30,6 +31,15 @@ const register = async (req, res) => {
             sameSite: process.env.NODE_ENV === "production" ? 'none' : 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000 
         });
+
+        // Sending welcome email 
+
+        const mailOptions = ({
+            from : process.env.SENDER_EMAIL,
+            to: email,
+            subject : "Welcome to OlumattyTech",
+            text: `Welcome to olumattyTech website. Your account has been created with email id : ${email}`
+        })
 
         return res.json({ success: true });
     }
