@@ -41,6 +41,8 @@ const register = async (req, res) => {
             text: `Welcome to olumattyTech website. Your account has been created with email id : ${email}`
         })
 
+        await transporter.sendMail(mailOptions)
+
         return res.json({ success: true });
     }
     catch (error) {
@@ -99,4 +101,20 @@ const logout = async (req, res) => {
     }
 }
 
-module.exports = { register, login, logout };
+const sendVerifyOtp = async(req, res) => {
+    try{
+        const {userId} = req.body;
+
+        const user = await userModel.findById(userId);
+
+        if (user.isAccountVerified){
+            return res.json({success: false, message:"Account Already Verified"})
+        }
+
+        const otp = String(Math.floor(100000 + Math.random() * 900000));
+    }
+    catch(error){
+        return res.json({success: false, message:error.message})      
+    }
+}
+module.exports = { register, login, logout, sendVerifyOtp };
