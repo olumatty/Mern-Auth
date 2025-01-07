@@ -114,9 +114,37 @@ const sendVerifyOtp = async(req, res) => {
         const otp = String(Math.floor(100000 + Math.random() * 900000));
 
         user.verifyOtp = otp;
+
+        user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 *1000
+
+        await user.save()
+
+        const mailOption = {
+            from: process.env.SENDER_EMAIL,
+            to : user.email,
+            subject:'Account Verification OTP',
+            text: `Your OTP is ${otp}. Verify your acccount using this OTP. `
+        }
+        await transporter.sendMail(mailOption)
+
+        res.json({success: true, message:'Verification OTP sent on Email'})
     }
     catch(error){
         return res.json({success: false, message:error.message})      
+    }
+}
+
+const verifyEmail = async(req, res) => {
+    const {userId, otp} = req.body 
+
+    if (!userId || !otp){
+        return res.json ({success:false, message: 'Missing Details'});
+    }
+    try{
+
+    }
+    catch(error){
+        return res.json ({success:false, message: error.message});
     }
 }
 module.exports = { register, login, logout, sendVerifyOtp };
