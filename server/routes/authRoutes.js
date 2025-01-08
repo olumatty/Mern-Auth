@@ -1,5 +1,5 @@
 const express = require("express");
-const { register, login, logout,sendVerifyOtp,verifyEmail } = require("../controller/authController");
+const { register, login, logout,sendVerifyOtp,verifyEmail, isAuthenticated } = require("../controller/authController");
 const userAuth = require("../middleware/userAuth");
 
 
@@ -10,5 +10,6 @@ authRouter.post('/login', login);
 authRouter.post('/logout', logout);
 authRouter.post('/send-verify-otp', userAuth, sendVerifyOtp);
 authRouter.post('/verfiy-account', userAuth, verifyEmail);
+authRouter.post('/is-auth', userAuth, isAuthenticated);
 
 module.exports = authRouter;
